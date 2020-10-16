@@ -2,14 +2,14 @@ let db;
 // create a new db request for a "budget" database.
 const request = indexedDB.open("budget", 1);
 
-request.onupgradeneeded = function (event) {
+request.onupgradeneeded = (e) => {
   // create object store called "pending" and set autoIncrement to true
-  const db = event.target.result;
+  const db = e.target.result;
   db.createObjectStore("pending", { autoIncrement: true });
 };
 
-request.onsuccess = function (event) {
-  db = event.target.result;
+request.onsuccess = (e) => {
+  db = e.target.result;
 
   // check if app is online before reading from db
   if (navigator.onLine) {
@@ -17,11 +17,11 @@ request.onsuccess = function (event) {
   }
 };
 
-request.onerror = function (event) {
-  console.log("Woops! " + event.target.errorCode);
+request.onerror = (e) => {
+  console.log("Woops! " + e.target.errorCode);
 };
 
-function saveRecord(record) {
+const saveRecord = (record) => {
   // create a transaction on the pending db with readwrite access
   const transaction = db.transaction(["pending"], "readwrite");
 
@@ -30,9 +30,9 @@ function saveRecord(record) {
 
   // add record to your store with add method.
   store.add(record);
-}
+};
 
-function checkDatabase() {
+const checkDatabase = () => {
   // open a transaction on your pending db
   const transaction = db.transaction(["pending"], "readwrite");
   // access your pending object store
@@ -40,7 +40,7 @@ function checkDatabase() {
   // get all records from store and set to a variable
   const getAll = store.getAll();
 
-  getAll.onsuccess = function () {
+  getAll.onsuccess = () => {
     if (getAll.result.length > 0) {
       fetch("/api/transaction/bulk", {
         method: "POST",
@@ -63,7 +63,7 @@ function checkDatabase() {
         });
     }
   };
-}
+};
 
 // listen for app coming back online
-window.addEventListener("online", checkDatabase);
+window.addeListener("online", checkDatabase);

@@ -14,7 +14,7 @@ fetch("/api/transaction")
     populateChart();
   });
 
-function populateTotal() {
+const populateTotal = () => {
   // reduce transaction amounts to a single total value
   let total = transactions.reduce((total, t) => {
     return total + parseInt(t.value);
@@ -22,9 +22,9 @@ function populateTotal() {
 
   let totalEl = document.querySelector("#total");
   totalEl.textContent = total;
-}
+};
 
-function populateTable() {
+const populateTable = () => {
   let tbody = document.querySelector("#tbody");
   tbody.innerHTML = "";
 
@@ -38,9 +38,9 @@ function populateTable() {
 
     tbody.appendChild(tr);
   });
-}
+};
 
-function populateChart() {
+const populateChart = () => {
   // copy array and reverse it
   let reversed = transactions.slice().reverse();
   let sum = 0;
@@ -78,9 +78,9 @@ function populateChart() {
       ],
     },
   });
-}
+};
 
-function sendTransaction(isAdding) {
+const sendTransaction = (isAdding) => {
   let nameEl = document.querySelector("#t-name");
   let amountEl = document.querySelector("#t-amount");
   let errorEl = document.querySelector(".form .error");
@@ -142,7 +142,7 @@ function sendTransaction(isAdding) {
       nameEl.value = "";
       amountEl.value = "";
     });
-}
+};
 
 document.querySelector("#add-btn").onclick = function () {
   sendTransaction(true);
